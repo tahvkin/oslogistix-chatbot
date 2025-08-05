@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OSLogistiX Chatbot</title>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -57,7 +61,7 @@
 </head>
 <body>
 
-  <button onclick="logTest()">Testlogi Google Sheetsi</button>
+  <button onclick="logTest()">Testlogi Supabase'i</button>
 
   <h1>OSLogistiX Chatbot</h1>
 
@@ -68,6 +72,12 @@
   <div id="response"></div>
 
   <script>
+    // Supabase client init
+    const SUPABASE_URL = 'https://qavaualurlwlxutlyzqy.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_zNFq8ZJjZYbefXHaeBqgpQ_t3pTjfwG';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Ask the chatbot + log to Supabase
     async function askChatbot() {
       const question = document.getElementById('question').value.trim();
       const responseDiv = document.getElementById('response');
@@ -96,7 +106,7 @@
         const answer = data.answer || "Tühjavõitu vastus...";
         responseDiv.innerText = answer;
 
-        // Logi Google Sheetsi
+        // Log to Supabase
         logTest(question, answer);
 
       } catch (err) {
@@ -105,32 +115,20 @@
       }
     }
 
-    <script>
-  function logTest() {
-    fetch("https://script.google.com/macros/s/AKfycbyvILGEPHqurf6kx67IzNpnib3dI7_AfGldOaunuxDiPyWud9ZnZHO5mxwUnrX3ZsLp/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "Test Google Sheets log"
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Google Sheets logi vastus:", data);
-      if (data.status === "success") {
-        alert("Logitud edukalt Google Sheetsi!");
-      } else {
-        alert("Logimine ebaõnnestus.");
-      }
-    })
-    .catch(err => {
-      console.error("Logimise viga:", err);
-      alert("Logimine ebaõnnestus.");
-    });
-  }
-</script>
+    // Log to Supabase table
+    async function logTest(question = "Testküsimus", answer = "Testvastus") {
+      const { data, error } = await supabase
+        .from('Chatbot_log')
+        .insert([{ question, answer, timestamp: new Date().toISOString() }]);
 
+      if (error) {
+        console.error("Logimise viga:", error);
+        alert("Logimine ebaõnnestus.");
+      } else {
+        console.log("Logitud:", data);
+        alert("Logitud Supabase'i!");
+      }
+    }
+  </script>
 </body>
 </html>
