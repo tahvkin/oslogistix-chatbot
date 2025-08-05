@@ -28,6 +28,10 @@ app.post('/chat', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('Tere tulemast OSLogistiX chatboti serverisse!');
+});
+
 app.listen(port, () => {
   console.log(`Server töötab pordil ${port}`);
 });
