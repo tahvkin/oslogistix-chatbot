@@ -105,31 +105,32 @@
       }
     }
 
-    function logTest(question = "Testküsimus", answer = "Testvastus") {
-      fetch("https://script.google.com/macros/s/AKfycbylKNRFp8TOptgROeikck-GWNNZeLfql-qmoRaoIxOhyhulC0Tb0WKoKG_wbM0lY7yY/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          timestamp: new Date().toISOString(),
-          question: question,
-          answer: answer
-        })
+    <script>
+  function logTest() {
+    fetch("https://script.google.com/macros/s/AKfycbyvILGEPHqurf6kx67IzNpnib3dI7_AfGldOaunuxDiPyWud9ZnZHO5mxwUnrX3ZsLp/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Test Google Sheets log"
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Google Sheets logimine:", data);
-        if (data.status === "success") {
-          alert("Logitud Google Sheetsi!");
-        } else {
-          alert("Logimine ebaõnnestus.");
-        }
-      })
-      .catch(err => {
-        console.error("Logimise viga:", err);
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Google Sheets logi vastus:", data);
+      if (data.status === "success") {
+        alert("Logitud edukalt Google Sheetsi!");
+      } else {
         alert("Logimine ebaõnnestus.");
-      });
-    }
-  </script>
+      }
+    })
+    .catch(err => {
+      console.error("Logimise viga:", err);
+      alert("Logimine ebaõnnestus.");
+    });
+  }
+</script>
 
 </body>
 </html>
