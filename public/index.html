@@ -56,26 +56,8 @@
   </style>
 </head>
 <body>
-  <button onclick="logTest()">Testlogi Google Sheetsi</button>
 
-<script>
-  function logTest() {
-    fetch("https://script.google.com/macros/s/AKfycbylKNRFp8TOptgROeikck-GWNNZeLfql-qmoRaoIxOhyhulC0Tb0WKoKG_wbM0lY7yY/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Tere, logi mind!" })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Vastus:", data);
-      alert("Logitud Google Sheetsi!");
-    })
-    .catch(err => {
-      console.error("Viga:", err);
-      alert("Logimine ebaõnnestus.");
-    });
-  }
-</script>
+  <button onclick="logTest()">Testlogi Google Sheetsi</button>
 
   <h1>OSLogistiX Chatbot</h1>
 
@@ -111,12 +93,43 @@
         }
 
         const data = await res.json();
-        responseDiv.innerText = data.answer || "Tühjavõitu vastus...";
+        const answer = data.answer || "Tühjavõitu vastus...";
+        responseDiv.innerText = answer;
+
+        // Logi Google Sheetsi
+        logTest(question, answer);
+
       } catch (err) {
         responseDiv.innerText = "Tekkis viga: " + err.message;
         console.error(err);
       }
     }
+
+    function logTest(question = "Testküsimus", answer = "Testvastus") {
+      fetch("https://script.google.com/macros/s/AKfycbylKNRFp8TOptgROeikck-GWNNZeLfql-qmoRaoIxOhyhulC0Tb0WKoKG_wbM0lY7yY/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          question: question,
+          answer: answer
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Google Sheets logimine:", data);
+        if (data.status === "success") {
+          alert("Logitud Google Sheetsi!");
+        } else {
+          alert("Logimine ebaõnnestus.");
+        }
+      })
+      .catch(err => {
+        console.error("Logimise viga:", err);
+        alert("Logimine ebaõnnestus.");
+      });
+    }
   </script>
+
 </body>
 </html>
