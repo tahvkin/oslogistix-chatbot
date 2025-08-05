@@ -8,6 +8,7 @@ const port = process.env.PORT || 10000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(express.static('public')); // <-- lisa see siia
 
 // OpenAI API konfiguratsioon
 const openai = new OpenAI({
