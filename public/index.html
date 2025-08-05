@@ -56,6 +56,27 @@
   </style>
 </head>
 <body>
+  <button onclick="logTest()">Testlogi Google Sheetsi</button>
+
+<script>
+  function logTest() {
+    fetch("https://script.google.com/macros/s/AKfycbylKNRFp8TOptgROeikck-GWNNZeLfql-qmoRaoIxOhyhulC0Tb0WKoKG_wbM0lY7yY/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "Tere, logi mind!" })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Vastus:", data);
+      alert("Logitud Google Sheetsi!");
+    })
+    .catch(err => {
+      console.error("Viga:", err);
+      alert("Logimine ebaõnnestus.");
+    });
+  }
+</script>
+
   <h1>OSLogistiX Chatbot</h1>
 
   <label for="question">Sisesta küsimus:</label>
